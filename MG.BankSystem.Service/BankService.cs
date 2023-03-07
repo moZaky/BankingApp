@@ -11,12 +11,13 @@
         }
         public void Deposit(int accountId, double amount)
         {
+            if (accountId < 0 || accountId >= _accounts.Length)
+                throw new ArgumentException("Account not exist", accountId.ToString());
+            if (amount <= 0)
+                throw new ArgumentException("Invalid amount", amount.ToString());
             lock (balanceLock)
             {
-                if (accountId < 0 || accountId >= _accounts.Length)
-                    throw new ArgumentException("Account not exist", accountId.ToString());
-                if (amount <= 0)
-                    throw new ArgumentException("Invalid amount", amount.ToString());
+               
                 _accounts[accountId] += amount;
             }
         }
@@ -31,15 +32,16 @@
 
         public void Withdraw(int accountId, double amount)
         {
+            if (accountId < 0 || accountId >= _accounts.Length)
+                throw new ArgumentException("Account not exist", accountId.ToString());
+            if (amount <= 0)
+                throw new ArgumentException("Invalid amount", amount.ToString());
+            if (amount > _accounts[accountId])
+                throw new ArgumentException("Amount is greater than your balance", amount.ToString());
+
             lock (balanceLock)
             {
-                if (accountId < 0 || accountId >= _accounts.Length)
-                    throw new ArgumentException("Account not exist", accountId.ToString());
-                if (amount <= 0)
-                    throw new ArgumentException("Invalid amount", amount.ToString());
-                if (amount > _accounts[accountId])
-                    throw new ArgumentException("Amount is greater than your balance", amount.ToString());
-
+             
                 _accounts[accountId] -= amount;
             }
         }
